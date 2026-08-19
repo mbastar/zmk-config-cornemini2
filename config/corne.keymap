@@ -83,8 +83,7 @@
         rbrc       { bindings = <&kp RBRC>;       key-positions = <30 31>; layers = <DEF>; }; /* N + M */
 
         /* --- new: replaces keys the Mini has no room for --- */
-        sqt        { bindings = <&kp SQT>;  key-positions = <10 22>; };  /* P + ;  → ' (was right thumb row) */
-        dqt        { bindings = <&kp DQT>;  key-positions = <22 34>; };  /* ; + /  → "                      */
+        sqt        { bindings = <&kp SQT>;  key-positions = <20 21>; };  /* K + L  → ' ; hold shift for " */
         capsword   { bindings = <&caps>;    key-positions = <16 19>; };  /* F + J  → caps word (was SHFT)   */
         del        { bindings = <&kp DEL>;  key-positions = <14 26>; };  /* S + X  → DEL (was bottom left)  */
     };
@@ -97,12 +96,12 @@
             // |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |
             // |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |   home-row mods
             // |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |
-            //         | TAB | ENT | ESC/NAV |   | SPC | SYM | BSPC |
+            //         | TAB | ENT | ESC/NAV |   | BSPC | SPC | SYM |
             bindings = <
 &trans  &kp Q        &kp W        &kp E         &kp R         &kp T         &kp Y      &kp U          &kp I          &kp O         &kp P            &trans
 &trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F  &kp G         &kp H      &hmr RSHFT J   &hmr RCTRL K   &hmr RALT L   &hmr RGUI SEMI   &trans
 &trans  &kp Z        &kp X        &kp C         &kp V         &kp B         &kp N      &kp M          &kp COMMA      &kp DOT       &kp FSLH         &trans
-                                  &kp TAB       &kp RET       &lt NAV ESC   &kp SPACE  &mo SYM        &kp BSPC
+                                  &kp TAB       &kp RET       &lt NAV ESC   &kp BSPC   &kp SPACE      &mo SYM
             >;
 
             /* FALLBACK ONLY -- if home-row mods genuinely fight you, swap this row in:
