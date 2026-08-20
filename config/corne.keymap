@@ -85,10 +85,12 @@
             layers = <DEF>;
         }; /* Q + Z */
         dictation {
-            bindings = <&kp RGUI>;
+            bindings = <&kp F13>;
             key-positions = <32 33>;
             layers = <DEF>;
-        }; /* , + . */
+        }; /* , + . -> F13 (Raycast dictation). Was RGUI: VoiceInk listens to
+              bare right-GUI, so every cross-hand Cmd from the `;` home-row mod
+              flashed the dictation window. F13 exists on no layer and no board. */
         lpar {
             bindings = <&kp LPAR>;
             key-positions = <4 5>;
