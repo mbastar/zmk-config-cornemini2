@@ -123,18 +123,17 @@
         }; /* N + M */
         /* --- new: replaces keys the Mini has no room for --- */
 
-        sqt {
-            bindings = <&kp SQT>;
-            key-positions = <21 22>;
-        };  /* K + L  → ' ; hold shift for " */
         capsword {
             bindings = <&caps>;
             key-positions = <16 19>;
         };  /* F + J  → caps word (was SHFT)   */
         del {
             bindings = <&kp DEL>;
-            key-positions = <14 26>;
-        };  /* S + X  → DEL (was bottom left)  */
+            key-positions = <27 28>;
+        };  /* C + V  → DEL. Was S+X: same finger, two rows, ring splayed --
+               confirmed uncomfortable in use. "cv" is in no English word, and the
+               V overlap with V+B is resolved by which keys are actually down.
+               DEL also stays on NAV and SYM at the right pinky bottom.  */
     };
 
     keymap {
@@ -144,19 +143,20 @@
             display-name = "Base";
 
             // |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  |
-            // |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  |   home-row mods
+            // |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  '  |   home-row mods
+            //                                                              tap = ' (shift = "); hold = RGUI
             // |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |
             //         | TAB | ENT | ESC/NAV |   | BSPC | SPC | SYM |
 
             bindings = <
 &trans  &kp Q        &kp W        &kp E         &kp R         &kp T          &kp Y     &kp U         &kp I         &kp O        &kp P           &trans
-&trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F  &kp G          &kp H     &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SEMI  &trans
+&trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F  &kp G          &kp H     &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SQT   &trans
 &trans  &kp Z        &kp X        &kp C         &kp V         &kp B          &kp N     &kp M         &kp COMMA     &kp DOT      &kp FSLH        &trans
                                   &kp TAB       &kp RET       &lt NAV ESC    &kp BSPC  &kp SPACE     &mo SYM
             >;
 
             /* FALLBACK ONLY -- if home-row mods genuinely fight you, swap this row in:
-&trans  &kp A  &kp S  &kp D  &kp F  &kp G   &kp H  &kp J  &kp K  &kp L  &kp SEMI  &trans
+&trans  &kp A  &kp S  &kp D  &kp F  &kp G   &kp H  &kp J  &kp K  &kp L  &kp SQT   &trans
                ...but Shift then has nowhere to live (no pinky column, no thumb row on
                this board), so you must ALSO move Shift onto a thumb in the same edit:
                        &mt LSHFT TAB   &kp RET   &lt NAV ESC
@@ -181,14 +181,14 @@
         SYM {
             display-name = "Sym/Fn";
 
-            // |  !  |  @  |  #  |  $  |  %  |   | F7 | F8 | F9 | F10 |  "  |
-            // |  ^  |  &  |  *  |  -  |  =  |   | F4 | F5 | F6 | F11 |  '  |
+            // |  !  |  @  |  #  |  $  |  %  |   | F7 | F8 | F9 | F10 |  :  |
+            // |  ^  |  &  |  *  |  -  |  =  |   | F4 | F5 | F6 | F11 |  ;  |
             // |  _  |  `  |  ~  |  \  | "|" |   | F1 | F2 | F3 | F12 | DEL |
 
             bindings = <
-&trans  &kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT    &kp F7  &kp F8  &kp F9  &kp F10  &kp DQT  &trans
-&trans  &kp CARET  &kp AMPS   &kp ASTRK  &kp MINUS  &kp EQUAL    &kp F4  &kp F5  &kp F6  &kp F11  &kp SQT  &trans
-&trans  &kp UNDER  &kp GRAVE  &kp TILDE  &kp BSLH   &kp PIPE     &kp F1  &kp F2  &kp F3  &kp F12  &kp DEL  &trans
+&trans  &kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT    &kp F7  &kp F8  &kp F9  &kp F10  &kp COLON  &trans
+&trans  &kp CARET  &kp AMPS   &kp ASTRK  &kp MINUS  &kp EQUAL    &kp F4  &kp F5  &kp F6  &kp F11  &kp SEMI   &trans
+&trans  &kp UNDER  &kp GRAVE  &kp TILDE  &kp BSLH   &kp PIPE     &kp F1  &kp F2  &kp F3  &kp F12  &kp DEL    &trans
                               &trans     &trans     &trans       &trans  &trans  &trans
             >;
         };
