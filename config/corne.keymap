@@ -18,6 +18,11 @@
 #define ADJ   3
 #define MOUSE 4
 
+/* Layer-taps now sit on BSPC and DEL, which you sometimes want to hold down to
+   repeat. quick-tap-ms restores that: tap the key, then press-and-hold again
+   within 200 ms and it repeats the tap instead of entering the layer. */
+&lt { quick-tap-ms = <200>; };
+
 /* 42-key matrix; outer columns (0, 11, 12, 23, 24, 35) are unpopulated on the Mini.
    Left:  0-5   12-17  24-29  thumbs 36 37 38
    Right: 6-11  18-23  30-35  thumbs 39 40 41 */
@@ -32,6 +37,44 @@
         /* Home-row mods. Cross-hand only: a left-hand mod fires only if a RIGHT-hand
            key follows, which is what stops "df" turning into ctrl+d. */
 
+        /* Three tiers, tuned by how often the TAP character is typed --
+           not by which finger it is. Misfire risk scales with tap frequency;
+           the cost of a hard hold scales with how often you need the mod. */
+
+        /* Index + middle (D F J K -> CTRL, SHIFT). Pressed mid-roll, so the
+           hold has to be easy to get: shorter term, and prior-idle dropped
+           from 150 to 80 because that guard was eating Shift when it followed
+           a letter fast -- the "f/ instead of ?" failure. */
+        hmli: home_row_mod_left_index {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <80>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <RIGHT_KEYS RIGHT_THUMB>;
+            hold-trigger-on-release;
+        };
+
+        hmri: home_row_mod_right_index {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <80>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <LEFT_KEYS LEFT_THUMB>;
+            hold-trigger-on-release;
+        };
+
+        /* Ring + pinky (S L ' -> ALT, ALT, GUI). Unchanged from the tuning that
+           has been running two weeks. ALT stays fast because option-arrow and
+           option-backspace are mid-flow editing gestures; ' stays fast because
+           it is the only source of Cmd for every left-hand letter. */
         hml: home_row_mod_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -55,6 +98,25 @@
             bindings = <&kp>, <&kp>;
 
             hold-trigger-key-positions = <LEFT_KEYS LEFT_THUMB>;
+            hold-trigger-on-release;
+        };
+
+        /* Left pinky only (A -> GUI). tap-preferred resolves as HOLD only when
+           the 280 ms term actually expires, no matter what else is pressed --
+           so "an", "and", "man", "a " can no longer become Cmd-N or Cmd-Space.
+           'a' is ~8% of English letters, which is why this one key needs the
+           guard; ' is under 0.3%, which is why the right pinky does not.
+           Cost: Cmd-N/K/P now need a deliberate 280 ms hold on A first. */
+        hmlp: home_row_mod_left_pinky {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+
+            hold-trigger-key-positions = <RIGHT_KEYS RIGHT_THUMB>;
             hold-trigger-on-release;
         };
 
@@ -146,13 +208,16 @@
             // |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  '  |   home-row mods
             //                                                              tap = ' (shift = "); hold = RGUI
             // |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  |
-            //         | TAB | ENT | ESC/NAV |   | BSPC | SPC | SYM |
+            //         | TAB | ENT | ESC/NAV |   | BSPC/SYM | SPC | DEL/SYM |
+            //   SYM moved from the outer right thumb to the inner one, mirroring NAV
+            //   on the inner left. The outer key keeps a SYM hold as a fallback and
+            //   picks up DEL on the tap.
 
             bindings = <
-&trans  &kp Q        &kp W        &kp E         &kp R         &kp T          &kp Y     &kp U         &kp I         &kp O        &kp P           &trans
-&trans  &hml LGUI A  &hml LALT S  &hml LCTRL D  &hml LSHFT F  &kp G          &kp H     &hmr RSHFT J  &hmr RCTRL K  &hmr RALT L  &hmr RGUI SQT   &trans
-&trans  &kp Z        &kp X        &kp C         &kp V         &kp B          &kp N     &kp M         &kp COMMA     &kp DOT      &kp FSLH        &trans
-                                  &kp TAB       &kp RET       &lt NAV ESC    &kp BSPC  &kp SPACE     &mo SYM
+&trans  &kp Q         &kp W        &kp E          &kp R          &kp T          &kp Y     &kp U          &kp I          &kp O        &kp P           &trans
+&trans  &hmlp LGUI A  &hml LALT S  &hmli LCTRL D  &hmli LSHFT F  &kp G          &kp H     &hmri RSHFT J  &hmri RCTRL K  &hmr RALT L  &hmr RGUI SQT   &trans
+&trans  &kp Z         &kp X        &kp C          &kp V          &kp B          &kp N     &kp M          &kp COMMA      &kp DOT      &kp FSLH        &trans
+                                   &kp TAB        &kp RET        &lt NAV ESC    &lt SYM BSPC  &kp SPACE      &lt SYM DEL
             >;
 
             /* FALLBACK ONLY -- if home-row mods genuinely fight you, swap this row in:
