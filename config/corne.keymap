@@ -189,6 +189,21 @@
             bindings = <&caps>;
             key-positions = <16 19>;
         };  /* F + J  → caps word (was SHFT)   */
+        plus {
+            bindings = <&kp PLUS>;
+            key-positions = <16 17>;
+            layers = <SYM>;
+        };  /* SYM: - and = pressed together -> +. `+` was unreachable by ANY
+               gesture: `=` lives only on SYM, shift lives only on DEF's
+               home-row mods and NAV, and holding SYM turns the F/shift key
+               into `-`. Scoped to SYM, so F+G on the base layer is still `[`.
+               &kp PLUS emits shift+equal itself, so no shift source needed.
+               Timeout left at the 50 ms default to match the F+G `[` combo,
+               which is the same physical gesture and already trained. The one
+               false-fire risk is typing `-=` fast (a real operator): if that
+               bites, add `timeout-ms = <30>;` here rather than
+               require-prior-idle-ms, which would also suppress a deliberate
+               `+` mid-expression -- the same trap that killed the `'` combo. */
         del {
             bindings = <&kp DEL>;
             key-positions = <27 28>;
@@ -249,6 +264,7 @@
             // |  !  |  @  |  #  |  $  |  %  |   | F7 | F8 | F9 | F10 |  :  |
             // |  ^  |  &  |  *  |  -  |  =  |   | F4 | F5 | F6 | F11 |  ;  |
             // |  _  |  `  |  ~  |  \  | "|" |   | F1 | F2 | F3 | F12 | DEL |
+            //   combo: - + =  ->  +
 
             bindings = <
 &trans  &kp EXCL   &kp AT     &kp HASH   &kp DLLR   &kp PRCNT    &kp F7  &kp F8  &kp F9  &kp F10  &kp COLON  &trans
